@@ -8,7 +8,7 @@ public interface MyCollection<E> extends Iterable<E> {
     boolean contains(Object var1);
     Iterator<E> iterator();
     boolean add(E var1);
-    boolean remove(E var1);
+    boolean remove(Object var1);
     boolean addAll(MyCollection<? extends E> vars1);
     boolean removeAll(MyCollection<?> vars1);
     boolean containsAll(MyCollection<?> vars1);
