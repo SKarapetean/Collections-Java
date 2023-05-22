@@ -1,7 +1,6 @@
 package Collections.Lists;
 import Collections.MyCollection;
 import Collections.Queues.MyDeque;
-import java.util.LinkedList;
 
 import java.util.Iterator;
 import java.util.ListIterator;
