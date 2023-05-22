@@ -5,7 +5,7 @@ It includes various data structures and algorithms commonly used in collections,
 
 ## Features
 
-- Custom implementations of interfaces like List.
+- Custom implementations of interfaces like List, Queue, Deque.
 - Common collection operations such as adding, removing, and searching elements.
 - Iteration and traversal support with iterators and enhanced for loops.
 - Support for generic types to allow the collection to store objects of different classes.
