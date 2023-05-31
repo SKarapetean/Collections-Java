@@ -28,6 +28,5 @@ public interface MyList<E> extends MyCollection<E> {
     int lastIndexOf(Object var1);
     ListIterator<E> listIterator();
     ListIterator<E> listIterator(int index);
-    MyList<E> subList(int index1, int index2);
 
 }

@@ -1,7 +1,6 @@
 package Collections.Lists;
 import Collections.MyCollection;
 import Collections.Queues.MyDeque;
-import java.util.LinkedList;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -322,17 +321,12 @@ public class MyLinkedList<E> implements MyDeque<E>, MyList<E>{
 
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return new ;
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
-    }
-
-    @Override
-    public MyList<E> subList(int index1, int index2) {
-        return null;
+        return new ;
     }
 
     @Override
@@ -476,6 +470,88 @@ public class MyLinkedList<E> implements MyDeque<E>, MyList<E>{
     @Override
     public E peek() {
         return this.first == null ? null : this.first.item;
+    }
+
+    private class MyListItr implements ListIterator<E> {
+        private Node<E> lastRet;
+        private Node<E> next;
+        private int nextIndex;
+
+        MyListItr(int index) {
+            this.next = index == MyLinkedList.this.size ? null : MyLinkedList.this.getNode(index);
+            this.nextIndex = index;
+        }
+        public boolean hasNext() {
+            return nextIndex < MyLinkedList.this.size;
+        }
+
+        public E next() {
+            if (!this.hasNext()) {
+                throw new NoSuchElementException();
+            } else {
+                this.lastRet = this.next;
+                this.next = this.next.next;
+                ++this.nextIndex;
+                return this.lastRet.item;
+            }
+        }
+
+        public boolean hasPrevious(){
+            return this.nextIndex > 0;
+        }
+
+        public E previous() {
+            if (!this.hasPrevious()) {
+                throw new NoSuchElementException();
+            } else {
+                this.next = this.lastRet = this.next == null ? MyLinkedList.this.last : this.next.prev;
+                --this.nextIndex;
+                return this.lastRet.item;
+            }
+        }
+
+        public int nextIndex() {
+            return this.nextIndex;
+        }
+
+        public int previousIndex() {
+            return this.nextIndex - 1;
+        }
+
+        public void remove() {
+            if (this.lastRet == null) {
+                throw new IllegalStateException();
+            } else {
+                Node<E> lastRetNext = this.lastRet.next;
+                MyLinkedList.this.unlink(this.lastRet);
+                if (this.next == this.lastRet) {
+                    this.next = lastRetNext;
+                } else {
+                    --this.nextIndex;
+                }
+
+                this.lastRet = null;
+            }
+        }
+
+        public void set(E var1) {
+            if (this.lastRet == null) {
+                throw new IllegalStateException();
+            } else {
+                this.lastRet.item = var1;
+            }
+        }
+
+        public void add(E var1) {
+            this.lastRet = null;
+            if (this.next == null) {
+                MyLinkedList.this.linkLast(var1);
+            } else {
+                MyLinkedList.this.linkBefore(var1, next);
+            }
+
+            ++this.nextIndex;
+        }
     }
 
 }

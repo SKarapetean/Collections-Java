@@ -2,11 +2,9 @@ package Collections.Lists;
 
 import Collections.MyCollection;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.NoSuchElementException;
-import java.util.Iterator;
-import java.util.ListIterator;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.util.*;
+
 //import java.util.function.Consumer;
 public class MyArrayList<E> implements MyList<E> {
     //private final int defaultCapacity = 10;
@@ -299,21 +297,17 @@ public class MyArrayList<E> implements MyList<E> {
 
         return -1;
     }
-//TODO
+
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return new MyListItr(0);
     }
-//TODO
+
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        return new MyListItr(index);
     }
-//TODO
-    @Override
-    public MyList<E> subList(int index1, int index2) {
-        return null;
-    }
+
     @Override
     public E get(int index) {
         this.indexChecker(index);
@@ -334,8 +328,8 @@ public class MyArrayList<E> implements MyList<E> {
     }
 
     private class MyItr implements Iterator<E> {
-        private int cursor;
-        private int lastRet = -1;
+        int cursor;
+        int lastRet = -1;
 
         MyItr() { }
 
@@ -353,10 +347,11 @@ public class MyArrayList<E> implements MyList<E> {
             } else {
                 if (index >= MyArrayList.this.elements.length) {
                     throw new ConcurrentModificationException();
+                } else {
+                    this.cursor = index + 1;
+                    lastRet = index;
+                    return (E) MyArrayList.this.elements[lastRet];
                 }
-                this.cursor = index + 1;
-                lastRet = index;
-                return (E) MyArrayList.this.elements[lastRet];
             }
         }
 
@@ -374,6 +369,66 @@ public class MyArrayList<E> implements MyList<E> {
                     throw new ConcurrentModificationException();
                 }
 
+            }
+        }
+    }
+
+    private class MyListItr extends MyArrayList<E>.MyItr implements ListIterator<E> {
+
+        MyListItr(int index) {
+            super();
+            this.cursor = index;
+        }
+        public boolean hasPrevious(){
+         return this.cursor != 0;
+        }
+
+        @Override
+        public int nextIndex(){
+            return this.cursor;
+        }
+
+        @Override
+        public int previousIndex(){
+            return this.cursor - 1;
+        }
+
+        public E previous(){
+            int i = this.cursor - 1;
+            if (i < 0) {
+                throw new NoSuchElementException();
+            } else {
+                if (i >= MyArrayList.this.elements.length) {
+                    throw new ConcurrentModificationException();
+                } else {
+                    this.cursor = this.lastRet = i;
+                    return (E)MyArrayList.this.elements[lastRet];
+                }
+            }
+        }
+
+        @Override
+        public void set(E var1) {
+            if (this.lastRet < 0) {
+                throw new IllegalStateException();
+            }
+
+            try{
+                MyArrayList.this.set(lastRet, var1);
+            } catch (IndexOutOfBoundsException var2) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        @Override
+        public void add(E var1) {
+            try {
+                int i = this.cursor;
+                MyArrayList.this.add(i, var1);
+                this.cursor = i + 1;
+                this.lastRet = -1;
+            } catch (IndexOutOfBoundsException var3) {
+                throw new ConcurrentModificationException();
             }
         }
     }
