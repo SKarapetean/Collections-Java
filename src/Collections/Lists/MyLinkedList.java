@@ -321,12 +321,12 @@ public class MyLinkedList<E> implements MyDeque<E>, MyList<E>{
 
     @Override
     public ListIterator<E> listIterator() {
-        return new ;
+        return new MyListItr(0);
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return new ;
+        return new MyListItr(index);
     }
 
     @Override
